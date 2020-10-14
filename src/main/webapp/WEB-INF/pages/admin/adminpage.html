@@ -92,11 +92,51 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-info">Edit</button>
+                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#editModal">Edit</button>
+                                        <!--
+                                        Модальное окно для edit
+                                        -->
+                                        <div id="editModal" class="modal fade">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Edit user</h4>
+                                                        <button class="close" data-dismiss="modal">x</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    ФОРМА ДЛЯ ЗАПОЛНЕНИЯ
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-secondary"data-dismiss="modal">Close</button>
+                                                        <button class="btn btn-info">Edit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <a th:href="@{'/admin/edit/'+${user.id}}">edit</a>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger">Delete</button>
+                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                                        <!--
+                                        Модальное окно для delete
+                                        -->
+                                        <div id="deleteModal" class="modal fade">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete user</h4>
+                                                        <button class="close" data-dismiss="modal">x</button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        ФОРМА С ДАННЫМИ
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <a th:href="@{'/admin/delete/'+${user.id}}">delete</a>
                                     </td>
                                 </tr>
@@ -109,32 +149,32 @@
                 -->
                 <div class="tab-pane fade" id="newUser">
                     <div class="card">
-                        <div class="card-header">Add new user</div>
+                        <div class="card-header"><h5>Add new user</h5></div>
                         <div class="card-body">
-                            <div class="container-fluid">
+                            <div class="container" style="max-width: 600px">
                                 <form method="POST" action="/admin/new" class="text-center">
                                     <div >
-                                        <label for="firstName">First name</label><br>
+                                        <label for="firstName"><b>First name</b></label><br>
                                         <input name="firstName" type="text" id="firstName" class="form-control"/>
                                     </div>
                                     <br>
                                     <div >
-                                        <label for="lastName">Last name</label><br>
+                                        <label for="lastName"><b>Last name</b></label><br>
                                         <input name="lastName" type="text" id="lastName" class="form-control"/>
                                     </div>
                                     <br>
                                     <div >
-                                        <label for="age">Age</label><br>
+                                        <label for="age"><b>Age</b></label><br>
                                         <input name="age" type="text" id="age" class="form-control"/>
                                     </div>
                                     <br>
                                     <div >
-                                        <label for="email">Email</label><br>
+                                        <label for="email"><b>Email</b></label><br>
                                         <input name="email" type="text" id="email" class="form-control"/>
                                     </div>
                                     <br>
                                     <div >
-                                        <label for="password">Password</label><br>
+                                        <label for="password"><b>Password</b></label><br>
                                         <input name="password" type="password" id="password" class=" form-control"/>
                                     </div>
                                     <br>
@@ -159,8 +199,6 @@
     </div>
 </div>
 
-<!--<a href="/admin/users">Users page</a>-->
-
 
 
 
@@ -174,6 +212,10 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+    $('#deleteModal')
+</script>
 
 </body>
 </html>
