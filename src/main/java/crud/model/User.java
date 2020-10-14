@@ -15,18 +15,57 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
 
+    @Column(name = "firstname")
+    private String firstName;
 
+    @Column(name = "lastname")
+    private String lastName;
+
+    @Column(name = "age")
+    private int age;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = this.lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public Long getId() {
@@ -38,7 +77,7 @@ public class User implements UserDetails {
     }
 
     public String getUsername() {
-        return username;
+        return email;
     }
 
     public Set<Role> getRoles() {
@@ -47,10 +86,6 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

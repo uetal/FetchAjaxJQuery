@@ -2,13 +2,178 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Admin Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
-<h1>admin page</h1>
-<div>
-    <h1 th:utext="${user.username}"></h1>
+<div class="container-fluid" style="padding: 0px">
+    <!--
+    Хэдэр страницы
+    -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark text-light">
+        <div class="row container-fluid">
+            <div class="col-lg-1 text-light">
+                <b><h5 th:utext="${user.email}" class="text-light">email</h5></b>
+            </div>
+            <div>
+                <h5 class="col-lg-1 text-nowrap">with roles:</h5>
+            </div>
+            <div class="col-lg-4 text-nowrap">
+                <div th:each="role : ${user.roles}" class="text-nowrap">
+                    <h6><span th:inline="text">[[${role.name}]]</span></h6>
+                </div>
+            </div>
+            <div class="col-lg-5">
+
+            </div>
+            <div class="text-right col-lg-1">
+                <a href="/logout" class="text-muted">Logout</a>
+            </div>
+        </div>
+    </nav>
+    <!--
+    Боди страницы
+    -->
+    <div class="row container-fluid" style="padding: 0px; margin: 0">
+        <!--
+        Кнопки страницы админа
+          -->
+        <div class="col-lg-2" style="padding: 0px">
+            <button type="button" class="btn btn-primary btn-block">Admin</button>
+            <a href="/user/"><button type="button" class="btn btn-link btn-block">User</button></a>
+        </div>
+        <!--
+        Панель админа
+        -->
+        <div class="col-lg-10 bg-light" >
+            <h1>Admin panel</h1>
+            <!--
+            Вкладки
+            -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#userTable">User table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#newUser">New user</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <!--
+                Вкладка со всеми юзерами
+                -->
+                <div class="tab-pane fade show active" id="userTable">
+                    <div class="card">
+                        <div class="card-header">All users</div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                    <th>Age</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+
+                                <tr th:each = "user: ${list}">
+                                    <td th:utext="${user.id}">id</td>
+                                    <td th:utext="${user.firstName}">firstName</td>
+                                    <td th:utext="${user.lastName}">lastName</td>
+                                    <td th:utext="${user.age}">age</td>
+                                    <td th:utext="${user.email}">email</td>
+                                    <td>
+                                        <div th:each="role : ${user.roles}">
+                                            <span th:inline="text">[[${role.name}]]</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-info">Edit</button>
+                                        <a th:href="@{'/admin/edit/'+${user.id}}">edit</a>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                        <a th:href="@{'/admin/delete/'+${user.id}}">delete</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                Вкладка создания нового юзера
+                -->
+                <div class="tab-pane fade" id="newUser">
+                    <div class="card">
+                        <div class="card-header">Add new user</div>
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <form method="POST" action="/admin/new" class="text-center">
+                                    <div >
+                                        <label for="firstName">First name</label><br>
+                                        <input name="firstName" type="text" id="firstName" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="lastName">Last name</label><br>
+                                        <input name="lastName" type="text" id="lastName" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="age">Age</label><br>
+                                        <input name="age" type="text" id="age" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="email">Email</label><br>
+                                        <input name="email" type="text" id="email" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="password">Password</label><br>
+                                        <input name="password" type="password" id="password" class=" form-control"/>
+                                    </div>
+                                    <br>
+                                    <select name="roles">
+                                        <option th:value="2" th:utext="ADMIN">ADMIN</option>
+                                        <option th:value="1" th:utext="USER">USER</option>
+                                    </select>
+                                    <br><br>
+                                    <button type="submit" class="btn btn-success">Add new user</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <a href="/admin/new">Add user</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<a href="/admin/users">Users page</a>
+
+<!--<a href="/admin/users">Users page</a>-->
+
+
+
+
+
+
+
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </body>
 </html>

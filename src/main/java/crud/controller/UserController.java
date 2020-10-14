@@ -8,6 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -24,6 +26,12 @@ public class UserController {
     public String userPage(Principal principal, ModelMap modelMap) {
         User user = (User) userService.loadUserByUsername(principal.getName());
         modelMap.addAttribute(user);
+        List<String>list=new ArrayList<>();
+        if (user.getRoles().size()>1){
+            list.add("2");
+        }
+        modelMap.addAttribute("list", list);
+
         return "user";
     }
 }
