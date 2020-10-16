@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,10 +24,17 @@ public class AdminController {
     @GetMapping(value = "/")
     public String getAdminPage(Principal principal, ModelMap modelMap) {
         User user = (User) userService.loadUserByUsername(principal.getName());
-        modelMap.addAttribute(user);
+        modelMap.addAttribute("user1" ,user);
         List<User> list= userService.listUsers();
         modelMap.addAttribute("list", list);
         return "admin/adminpage";
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String deleteUser(@RequestParam("deleteid")Long id){
+        User user = userService.getById(id);
+        userService.delete(user);
+        return "redirect:/admin/";
     }
 
     @PostMapping(value = "/new")
@@ -53,70 +61,42 @@ public class AdminController {
                 setRole.add(new Role(1L, "ROLE_USER"));
             }
         }
-        setRole.add(new Role(1L, "ROLE_USER"));
+//        setRole.add(new Role(1L, "ROLE_USER"));
         user.setRoles(setRole);
         userService.add(user);
         return "redirect:/admin/";
     }
 
-//    @PostMapping(value = "/new")
-//    public String addUser(@RequestParam("name")String name,
-//                          @RequestParam("password")String password)
-//    {
-//        Set<Role> set = new HashSet<>();
-//        set.add(new Role(1L,"ROLE_USER"));
-//        User user = new User();
-//        user.setUsername(name);
-//        user.setPassword(password);
-//        user.setRoles(set);
-//        userService.add(user);
-//        return "redirect:/admin/users";
-//    }
-//
-//    @GetMapping(value = "/new")
-//    public String newUser() {
-//        return "admin/new";
-//    }
 
-//    @GetMapping(value = "/edit/{id}")
-//    public String editUser(@PathVariable("id") Long id, ModelMap modelMap) {
-//        User user = userService.getById(id);
-//        List<Role>roleList=userService.listRoles();
-//        modelMap.addAttribute("user",user);
-//        modelMap.addAttribute("rolelist",roleList);
-//        return "admin/update";
-//    }
-
-//    @PostMapping(value = "/edit")
-//    public String updateUser(@RequestParam("id") Long id,
-//                             @RequestParam("name")String name,
-//                             @RequestParam("roles") String[] roles,
-//                             @RequestParam("password")String password)
-//    {
-//        Set<Role>setRoles=new HashSet<>();
-//        for (String role : roles) {
-//            if (Integer.parseInt(role)==2) {
-//                setRoles.add(new Role(2L, "ROLE_ADMIN"));
-//            }
-//            if (Integer.parseInt(role)==1) {
-//                setRoles.add(new Role(1L, "ROLE_USER"));
-//            }
-//        }
-//        User user = new User();
-//        user.setUsername(name);
-//        user.setPassword(password);
-//        user.setId(id);
-//        user.setRoles(setRoles);
-//        userService.update(user);
-//        return "redirect:/admin/users";
-//    }
-
-    @GetMapping(value = "/delete/{id}")
-    public String deleteUser(@PathVariable("id")Long id){
+    @GetMapping(value = "/edit/{id}")
+    public String editUser(
+            @RequestParam("editid") Long id,
+            @RequestParam("editfirstName") String firstname,
+            @RequestParam("editlastName") String lastname,
+            @RequestParam("editage") int age,
+            @RequestParam("editemail") String email,
+            @RequestParam("editpassword") String password,
+            @RequestParam("roles") String[] roles
+    ) {
         User user = userService.getById(id);
-        userService.delete(user);
+        user.setFirstName(firstname);
+        user.setLastName(lastname);
+        user.setAge(age);
+        user.setEmail(email);
+        user.setPassword(password);
+        Set<Role>setRole=new HashSet<>();
+        for (String role : roles) {
+            if (Integer.parseInt(role)==2) {
+                setRole.add(new Role(2L, "ROLE_ADMIN"));
+            }
+            if (Integer.parseInt(role)==1) {
+                setRole.add(new Role(1L, "ROLE_USER"));
+            }
+        }
+        if (setRole.size()==0){
+            setRole.add(new Role(1L, "ROLE_USER"));
+        }
+        userService.update(user);
         return "redirect:/admin/";
     }
-
-
 }

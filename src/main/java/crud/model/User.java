@@ -57,7 +57,7 @@ public class User implements UserDetails {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = this.lastName;
+        this.lastName = lastName;
     }
 
     public int getAge() {
