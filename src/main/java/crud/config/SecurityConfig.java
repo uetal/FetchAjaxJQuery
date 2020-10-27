@@ -38,8 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/").permitAll() // доступность всем
                 .antMatchers("/login").anonymous()
-                .antMatchers("/user/**").authenticated()
-                .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')")// разрешаем входить на /user пользователям с ролью User
+                .antMatchers("/user/**").authenticated()// разрешаем входить на /user пользователям с ролью User
+                .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers("/restadmin/**").access("hasAnyRole('ROLE_ADMIN')")
                 .and().formLogin()
                 .usernameParameter("email")
                 .passwordParameter("password")// Spring сам подставит свою логин форму
