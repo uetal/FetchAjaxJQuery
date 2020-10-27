@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container-fluid" style="padding: 0px">
+    <!--
+    Хэдэр страницы
+    -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark text-light">
+
+    </nav>
+    <!--
+    Боди страницы
+    -->
+    <div class="row container-fluid" style="padding: 0px; margin: 0">
+        <!--
+        Кнопки страницы админа
+          -->
+        <div class="col-lg-2" style="padding: 0px">
+            <button type="button" class="btn btn-primary btn-block">Admin</button>
+            <a href="/user/"><button type="button" class="btn btn-link btn-block" th:if="${not #lists.isEmpty(listRole)}">User</button></a>
+        </div>
+        <!--
+        Панель админа
+        -->
+        <div class="col-lg-10 bg-light" >
+            <h1>Admin panel</h1>
+            <!--
+            Вкладки
+            -->
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#userTable">User table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#newUser">New user</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <!--
+                Вкладка со всеми юзерами
+                -->
+                <div class="tab-pane fade show active" id="userTable">
+                    <div class="card">
+                        <div class="card-header">All users</div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <!--
+                                Таблица заполняется в скрипте
+                                -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                Вкладка создания нового юзера
+                -->
+                <div class="tab-pane fade" id="newUser">
+                    <div class="card">
+                        <div class="card-header"><h5>Add new user</h5></div>
+                        <div class="card-body">
+                            <div class="container" style="max-width: 600px">
+                                <form id="addUserForm" class="text-center" >
+                                    <div >
+                                        <label for="firstName"><b>First name</b></label><br>
+                                        <input name="firstName" type="text" id="firstName" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="lastName"><b>Last name</b></label><br>
+                                        <input name="lastName" type="text" id="lastName" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="age"><b>Age</b></label><br>
+                                        <input name="age" type="text" id="age" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="email"><b>Email</b></label><br>
+                                        <input name="email" type="text" id="email" class="form-control"/>
+                                    </div>
+                                    <br>
+                                    <div >
+                                        <label for="password"><b>Password</b></label><br>
+                                        <input name="password" type="password" id="password" class=" form-control" autocomplete="on"/>
+                                    </div>
+                                    <br>
+                                    <label><b>Role</b></label>
+                                    <select id="roles" multiple="multiple" style="height: 60px" class="browser-default custom-select text-center">
+                                        <option value="ADMIN">ADMIN</option>
+                                        <option value="USER" >USER</option>
+                                    </select>
+                                    <button id="addUserButton" type="submit" class="btn btn-success">Add new user</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--
+Модальное окно для edit
+-->
+<div id="editModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="text-center" >
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit user</h4>
+                    <button class="close" data-dismiss="modal">x</button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="container" style="max-width: 300px">
+                        <div>
+                            <label for="editid"><b>ID</b></label><br>
+                            <input name="editid" type="text" id="editid" class="form-control text-center" readonly/>
+                            <br>
+                            <div>
+                                <label for="editfirstName"><b>First name</b></label><br>
+                                <input name="editfirstName" type="text" id="editfirstName" class="form-control text-center" />
+                            </div>
+                            <br>
+                            <div>
+                                <label for="editlastName"><b>Last name</b></label><br>
+                                <input name="editlastName" type="text" id="editlastName" class="form-control text-center" />
+                            </div>
+                            <br>
+                            <div>
+                                <label for="editage"><b>Age</b></label><br>
+                                <input name="editage" type="number" id="editage" class="form-control text-center" />
+                            </div>
+                            <br>
+                            <div>
+                                <label for="editemail"><b>Email</b></label><br>
+                                <input name="editemail" type="text" id="editemail" class="form-control text-center" />
+                            </div>
+                            <br>
+                            <div>
+                                <label for="editpassword"><b>Password</b></label><br>
+                                <input name="editpassword" type="password" id="editpassword" class="form-control text-center" autocomplete="on"/>
+                            </div>
+                            <br>
+                            <label><b>Role</b></label>
+                            <select id="editroles" multiple="multiple" style="height: 60px" class="browser-default custom-select text-center">
+                                <option value="ADMIN" >ADMIN</option>
+                                <option value="USER" >USER</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"data-dismiss="modal">Close</button>
+                    <button class="btn btn-info" id="editUserButton">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--
+Модальное окно удаления
+-->
+<div>
+    <div id="deleteModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="text-center">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete user</h4>
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div class="container" style="max-width: 300px">
+                            <div>
+                                <label for="deleteid"><b>ID</b></label><br>
+                                <input name="deleteid" type="text" id="deleteid" class="form-control text-center" readonly/>
+                            </div>
+                            <br>
+                            <div>
+                                <label for="deletefirstName"><b>First name</b></label><br>
+                                <input name="deletefirstName" type="text" id="deletefirstName" class="form-control text-center" readonly/>
+                            </div>
+                            <br>
+                            <div>
+                                <label for="deletelastName"><b>Last name</b></label><br>
+                                <input name="deletelastName" type="text" id="deletelastName" class="form-control text-center" readonly/>
+                            </div>
+                            <br>
+                            <div>
+                                <label for="deleteage"><b>Age</b></label><br>
+                                <input name="deleteage" type="text" id="deleteage" class="form-control text-center" readonly/>
+                            </div>
+                            <br>
+                            <div>
+                                <label for="deleteemail"><b>Email</b></label><br>
+                                <input name="deleteemail" type="text" id="deleteemail" class="form-control text-center" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-danger" onclick="sendFormDeleteProfile()">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+    const urlUser = 'http://localhost:8080/restuser/'
+    const urlTable = 'http://localhost:8080/restadmin/'
+
+    const header = document.querySelector('.navbar-expand-lg')
+    const table = document.querySelector('.table-striped')
+
+    let outputHeader = ''
+    let outputTable = ''
+    let roleInHeader =''
+    let roleInTable =''
+
+    /*
+    Заполнение хэдера страницы
+     */
+    fetch(urlUser)
+        .then((response)=> response.json())
+        .then(data => {
+            data.forEach(user => {
+                user.roles.forEach(role =>{
+                    roleInHeader+=role.name+" "
+                })
+                outputHeader +=''+
+                "<div class=\"row container-fluid\">\n" +
+                "            <div class=\"col-lg-1 text-light\">\n" +
+                "                <b><h5 class=\"text-light\">"+user.email+"</h5></b>\n" +
+                "            </div>\n" +
+                "            <div>\n" +
+                "                <h5 class=\"col-lg-1 text-nowrap\">with roles:</h5>\n" +
+                "            </div>\n" +
+                "            <div class=\"col-lg-4 text-nowrap\">\n" +
+                "                <div><b>"+roleInHeader+"</b></div>"+
+                "            </div>\n" +
+                "            <div class=\"col-lg-5\">\n" +
+                "            </div>\n" +
+                "            <div class=\"text-right col-lg-1\">\n" +
+                "                <a href=\"/logout\" class=\"text-muted\">Logout</a>\n" +
+                "            </div>\n" +
+                "        </div>"
+            })
+            header.innerHTML=outputHeader
+        })
+    /*
+    Заполнение таблицы юзеров
+     */
+    fetch(urlTable)
+        .then((response) => response.json())
+        .then(data => {
+            outputTable+='' +
+                '<tr>' +
+                '<th>ID</th>' +
+                '<th>First name</th>' +
+                '<th>Last name</th>' +
+                '<th>Age</th>' +
+                '<th>Email</th>' +
+                '<th>Role</th>' +
+                '<th>Edit</th>' +
+                '<th>Delete</th>' +
+                '</tr>'
+
+            data.forEach (user =>{
+                user.roles.forEach(role =>{
+                    roleInTable+=role.name+" "
+                })
+                outputTable+=''+
+                    "<tr>" +
+                    "<td>"+user.id+"</td>" +
+                    "<td>"+user.firstName+"</td>" +
+                    "<td>"+user.lastName+"</td>" +
+                    "<td>"+user.age+"</td>" +
+                    "<td>"+user.email+"</td>" +
+                    "<td><div>"+roleInTable+"</div></td>"+
+                    "<td><button type='submit' class='btn btn-info' data-toggle='modal' data-target='#editModal' onclick='getProfileForEdit("+user.id+")'>Edit</button></td>"+
+                    "<td><button type='submit' class='btn btn-danger' data-toggle='modal' data-target='#deleteModal' onclick='getProfileForDelete("+user.id+")'>Delete</button></td>"+
+                    "</tr>"
+                roleInTable=''
+
+            })
+            table.innerHTML=outputTable
+        })
+</script>
+<!--
+создание юзера
+-->
+<script>
+    $("#addUserButton").click(function(event) {
+        let data = {}
+        data["firstName"] = $("#firstName").val();
+        data["lastName"] = $("#lastName").val();
+        data["age"] = $("#age").val();
+        data["email"] = $("#email").val();
+        data["password"] = $("#password").val();
+        data["roles"] = [];
+        let stringRoles = $("#roles").val();
+        for (let i = 0; i < stringRoles.length; i++) {
+            if (stringRoles[i]=='USER') {
+                data["roles"].push({
+                    id: 1,
+                    name: "ROLE_USER"
+                })
+            }
+            if (stringRoles[i]=='ADMIN') {
+                data["roles"].push({
+                    id: 2,
+                    name: "ROLE_ADMIN"
+                })
+            }
+        }
+        if (stringRoles.length==0){
+            data["roles"].push({
+                id: 1,
+                name: "ROLE_USER"
+            })
+        }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/restadmin/add",
+            data: JSON.stringify(data),
+            dataType: 'json'
+        })
+    })
+</script>
+<!--
+заполнение модального окна удаления
+-->
+<script>
+    function getProfileForDelete(id) {
+        $.getJSON('http://localhost:8080/restadmin/' + id, function (userDelete) {
+            let user = userDelete;
+            document.getElementById('deleteid').value = user.id;
+            document.getElementById('deletefirstName').value = user.firstName;
+            document.getElementById('deletelastName').value = user.lastName;
+            document.getElementById('deleteage').value = user.age;
+            document.getElementById('deleteemail').value = user.email;
+        })
+    }
+
+    function sendFormDeleteProfile() {
+        $.ajax({
+            type: 'DELETE',
+            url: 'http://localhost:8080/restadmin/delete/' + document.getElementById('deleteid').value,
+            cache: false
+        });
+    }
+</script>
+<!--
+заполнение модального окна изменения
+-->
+<script>
+    function getProfileForEdit(id) {
+        $.getJSON('http://localhost:8080/restadmin/' + id, function (userEdit) {
+            let user = userEdit;
+            document.getElementById('editid').value = user.id;
+            document.getElementById('editfirstName').value = user.firstName;
+            document.getElementById('editlastName').value = user.lastName;
+            document.getElementById('editage').value = user.age;
+            document.getElementById('editemail').value = user.email;
+            document.getElementById('editpassword').value = user.password;
+        })
+    }
+
+    $("#editUserButton").click(function (event) {
+        let data = {}
+        data["id"] = $("#editid").val();
+        data["firstName"] = $("#editfirstName").val();
+        data["lastName"] = $("#editlastName").val();
+        data["age"] = $("#editage").val();
+        data["email"] = $("#editemail").val();
+        data["password"] = $("#editpassword").val();
+        data["roles"] = [];
+        let stringRoles = $("#editroles").val();
+        for (let i = 0; i < stringRoles.length; i++) {
+            if (stringRoles[i]=='USER') {
+                data["roles"].push({
+                    id: 1,
+                    name: "ROLE_USER"
+                })
+            }
+            if (stringRoles[i]=='ADMIN') {
+                data["roles"].push({
+                    id: 2,
+                    name: "ROLE_ADMIN"
+                })
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/restadmin/edit/",
+            data: JSON.stringify(data),
+            dataType: 'json'
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package crud.controller;
 
+import crud.model.Role;
 import crud.model.User;
 import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,16 @@ public class UserController {
     @GetMapping(value = "/user")
     public String userPage(Principal principal, ModelMap modelMap) {
         User user = (User) userService.loadUserByUsername(principal.getName());
-        modelMap.addAttribute(user);
+        /*
+        Для отображения кнопки Админ на странице юзера
+         */
         List<String>list=new ArrayList<>();
-        if (user.getRoles().size()>1){
-            list.add("2");
+        for (Role role : user.getRoles()){
+            if (role.getName().equals("ROLE_ADMIN")){
+                list.add("2");
+            }
         }
         modelMap.addAttribute("list", list);
-
-        return "user";
+        return "restuser";
     }
 }
